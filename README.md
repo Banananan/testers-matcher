@@ -5,6 +5,6 @@
 # To run 
   application use command line and enter:
 - `./gradlew distZip` command to compile code;
-- java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar <country> "<device_name>" to start.
+- java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar "<country_code>" "<device_name>" to start.
 # Result
   will be displayed in command line.
