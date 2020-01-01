@@ -2,27 +2,58 @@ package applause.testersmatcher.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-public final class Tester implements Identifiable<Long> {
-    private final Long id;
+@Entity
+public class Tester {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    private final String firstName;
+    private String firstName;
 
-    private final String lastName;
+    private String lastName;
 
-    private final String country;
+    private String country;
 
-    private final LocalDateTime lastLogin;
+    private LocalDateTime lastLogin;
 
-    public Tester(Long id, String firstName, String lastName, String country, LocalDateTime lastLogin) {
-        this.id = id;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tester_device",
+            joinColumns = @JoinColumn(name = "tester_id"),
+            inverseJoinColumns = @JoinColumn(name = "device_id")
+    )
+    private Set<Device> devices;
+
+    @OneToMany(mappedBy = "tester")
+    private Set<Bug> bugs;
+
+    public Tester(
+            String firstName,
+            String lastName,
+            String country,
+            LocalDateTime lastLogin,
+            Set<Device> devices
+    ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.country = country;
         this.lastLogin = lastLogin;
+        this.devices = devices;
     }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -43,6 +74,14 @@ public final class Tester implements Identifiable<Long> {
         return lastLogin;
     }
 
+    public Set<Device> getDevices() {
+        return devices;
+    }
+
+    public Set<Bug> getBugs() {
+        return bugs;
+    }
+
     public String getName() {
         return firstName + " " + lastName;
     }
@@ -52,16 +91,18 @@ public final class Tester implements Identifiable<Long> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tester tester = (Tester) o;
-        return id.equals(tester.id) &&
+        return Objects.equals(id, tester.id) &&
                 firstName.equals(tester.firstName) &&
                 lastName.equals(tester.lastName) &&
                 country.equals(tester.country) &&
-                Objects.equals(lastLogin, tester.lastLogin);
+                lastLogin.equals(tester.lastLogin) &&
+                Objects.equals(devices, tester.devices) &&
+                Objects.equals(bugs, tester.bugs);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, country, lastLogin);
+        return Objects.hash(id, firstName, lastName, country, lastLogin, devices, bugs);
     }
 
     @Override
@@ -72,6 +113,8 @@ public final class Tester implements Identifiable<Long> {
                 ", lastName='" + lastName + '\'' +
                 ", country='" + country + '\'' +
                 ", lastLogin=" + lastLogin +
+                ", devices=" + devices +
+                ", bugs=" + bugs +
                 '}';
     }
 }
