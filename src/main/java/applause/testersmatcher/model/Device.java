@@ -22,6 +22,9 @@ public class Device {
     @ManyToMany(mappedBy = "devices")
     private Set<Tester> testers;
 
+    public Device() {
+    }
+
     public Device(String description) {
         this.description = description;
     }
@@ -48,14 +51,12 @@ public class Device {
         if (o == null || getClass() != o.getClass()) return false;
         Device device = (Device) o;
         return Objects.equals(id, device.id) &&
-                description.equals(device.description) &&
-                Objects.equals(bugs, device.bugs) &&
-                Objects.equals(testers, device.testers);
+                description.equals(device.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, bugs, testers);
+        return Objects.hash(id, description);
     }
 
     @Override

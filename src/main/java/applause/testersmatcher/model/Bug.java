@@ -33,6 +33,9 @@ public class Bug {
     @JoinColumn(name = "tester_id", referencedColumnName = "id", nullable = false)
     private Tester tester;
 
+    public Bug() {
+    }
+
     public Bug(Set<Device> devices, Tester tester) {
         this.devices = devices;
         this.tester = tester;

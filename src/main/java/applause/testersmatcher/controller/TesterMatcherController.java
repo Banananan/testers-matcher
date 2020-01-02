@@ -1,9 +1,9 @@
 package applause.testersmatcher.controller;
 
-import applause.testersmatcher.dto.Match;
 import applause.testersmatcher.service.TestersMatcher;
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +21,12 @@ class TesterMatcherController {
     }
 
     @GetMapping
-    Set<Match> getMatch(@RequestParam Set<String> countries, @RequestParam Set<String> devices) {
+    Map<String, Integer> getMatch(@RequestParam Set<String> countries, @RequestParam Set<String> devices) {
         var matches = testersMatcher.getMatch(countries, devices);
-        return new HashSet<>(matches);
+        return matches.stream().collect(Collectors.toMap(
+                match -> match.getTester().getName(),
+                match -> match.getBugs().size(),
+                Integer::sum
+        ));
     }
 }

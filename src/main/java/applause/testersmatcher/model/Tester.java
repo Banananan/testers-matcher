@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Tester {
@@ -21,12 +20,15 @@ public class Tester {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     private String lastName;
 
     private String country;
 
+    @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -39,6 +41,9 @@ public class Tester {
 
     @OneToMany(mappedBy = "tester")
     private Set<Bug> bugs;
+
+    public Tester() {
+    }
 
     public Tester(
             String firstName,
@@ -96,13 +101,12 @@ public class Tester {
                 lastName.equals(tester.lastName) &&
                 country.equals(tester.country) &&
                 lastLogin.equals(tester.lastLogin) &&
-                Objects.equals(devices, tester.devices) &&
-                Objects.equals(bugs, tester.bugs);
+                Objects.equals(devices, tester.devices);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, country, lastLogin, devices, bugs);
+        return Objects.hash(id, firstName, lastName, country, lastLogin, devices);
     }
 
     @Override
