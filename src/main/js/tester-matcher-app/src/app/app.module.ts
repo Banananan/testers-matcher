@@ -1,18 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { MatchListComponent } from './component/match-list/match-list.component';
+import { MatchService } from './service/match.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MatchListComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [MatchService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
