@@ -1,24 +1,30 @@
 # testers-matcher
 
 # Configuration
-  is kept in CSV files stored in `src\main\resources`. Test configuration is in `src\test\resources`.
-# To run 
+  is kept in data.sql file stored in `src\main\resources`. It's value is read on each application startup. Hibernate's schema model is recreated and data reinserted each time.
+# To run backend
   application use command line and enter:
-- `./gradlew distZip` command to compile code;
-- `java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar "<country_code1,country_code2,...>" "<device_name1,device_name2,...>"` to start.
+- `./gradlew clean build` command to compile code;
+- `java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar` to start.
+# To run frontend
+  application use command line and enter:
+- `cd src/main/js/tester-matcher-app/` to go to Angular's app source code;
+- `ng serve --open` to start.
 # Result
-  will be displayed in command line.
+  can be displayed in webpage:
+- go to browser and enter `http://localhost:4200/` in address bar.
+  or in JSON form:
+- go to brower and enter `http://localhost:8080/match?countries=US&devices=iPhone%204,iPhone%205` (sample request) in address bar.
 # Examples
 - to search for testers from US with iPhone 4 device:
-  - `java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar US "iPhone 4"`
-  - `{Taybin Rutkin=66, Miguel Bautista=23}`
+  - enter `US` in `Country` field and `iPhone 4` in `Device` field and tap Search;
+  - send request `http://localhost:8080/match?countries=US&devices=iPhone%204`;
+  - result will be`{"Taybin Rutkin":66,"Miguel Bautista":23}`.
 - to search for testers from US and GB with iPhone 4 and iPhone 5 devices:
-  - `java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar "US,GB" "iPhone 4,iPhone 5"`
-  - `{Taybin Rutkin=66, Stanley Chen=110, Miguel Bautista=53, Leonard Sutton=32}`
+  - enter `US,GB` in `Country` field and `iPhone 4,iPhone 5` in `Device` field; and tap Search;
+  - send request `http://localhost:8080/match?countries=US,GB&devices=iPhone%204,iPhone%205`;
+  - result will be `{"Taybin Rutkin":66,"Stanley Chen":110,"Miguel Bautista":53,"Leonard Sutton":32}`.
 - to search for testers from everywhere with any kind of device:
-  - `java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar ALL ALL`
-  - `{Sean Wellington=116, Taybin Rutkin=125, Stanley Chen=110, Mingquan Zheng=109, Michael Lubavin=99, Miguel Bautista=114, Darshini Thiagarajan=104, Lucas Lowry=117, Leonard Sutton=106}`
-- invalid input arguments
-  - `java -jar build/libs/testersmatcher-1.0-SNAPSHOT.jar`
-  - `applause.testersmatcher.Application main
-      SEVERE: Invalid arguments passed - must be two arguments: first - country name (GB, US or ALL for any); second - device name (iPhone 4, Galasy S3 or ALL for any)`
+  - enter `ALL` in `Country` field and `ALL` in `Device` field and tap Search;
+  - send request `http://localhost:8080/match?countries=ALL&devices=ALL`;
+  - result will be `{"Sean Wellington":116,"Taybin Rutkin":125,"Stanley Chen":110,"Mingquan Zheng":109,"Michael Lubavin":99,"Miguel Bautista":114,"Darshini Thiagarajan":104,"Leonard Sutton":106,"Lucas Lowry":117}`.
